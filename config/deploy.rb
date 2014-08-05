@@ -1,63 +1,93 @@
-set :application, "bd"
-set :domain, "pink.iff.edu.br"
-set :deploy_to, "/home/deploy/#{application}"
-set :user, "deploy"
-set :use_sudo, false
-set :keep_releases, 3
-
-set :repository,  "https://github.com/nsi-iff/bd.git"
-set :scm, :git
-set :scm_verbose, true
-
-role :web, domain
-role :app, domain
-role :db,  domain, :primary => true
-
-set :normalize_asset_timestamps, false
-
 require "bundler/capistrano"
-$:.unshift(File.expand_path('./lib', ENV['rvm_path']))
-set :rvm_ruby_string, "ruby-1.9.3-p125@bd"
-set :rvm_type, :user
+
+set :bundle_flags, "--deployment"
+server "10.0.1.79", :web, :app, :db, primary: true
 
 default_environment["RAILS_ENV"] = 'production'
 
-namespace :utils do
-  task :compile_assets do
-    run "cd #{latest_release}; bundle exec rake assets:precompile"
-  end
-  task :run_seed do
-    run "cd #{latest_release}; bundle exec rake db:seed"
-  end
-  task :copy_config_file do
-    run "cat ~/.nsi/database.yml > #{latest_release}/config/database.yml"
-    run "cat ~/.nsi/sam.yml > #{latest_release}/config/sam.yml"
-    run "cat ~/.nsi/elasticsearch.yml > #{latest_release}/config/elasticsearch.yml"
-    run "cat ~/.nsi/cloudooo.yml > #{latest_release}/config/cloudooo.yml"
-    run "cat ~/.nsi/mail.yml > #{latest_release}/config/mail.yml"
-  end
-end
+set :application, "bd"
+set :user, "deploy"
+set :deploy_to, "/home/#{user}/#{application}"
+set :deploy_via, :remote_cache
+set :use_sudo, false
 
-namespace :bundle do
-  task :install do
-    run "cd #{release_path} && bundle install --without test development --deployment"
-  end
-end
+set :scm, "git"
+set :repository, "https://github.com/dgti-iff/bd.git"
+set :branch, "master"
 
-namespace :db do
-  task :create do; run "cd #{release_path}; rake db:create"; end
-  task :migrate do; run "cd #{release_path}; rake db:migrate"; end
-end
+set :shared_children, shared_children + %w{public/uploads}
+
+before "deploy:cold", "deploy:install_bundler"
+default_run_options[:pty] = true
+ssh_options[:forward_agent] = true
+
+
+after "deploy", "deploy:cleanup", "deploy:precompile_assets" # keep only the last 5 releases
+#after "deploy:symlink", "deploy:update_crontab"
 
 namespace :deploy do
-  task :start do ; end
-  task :stop do ; end
-  task :restart, :roles => :app, :except => { :no_release => true } do
-    run "#{try_sudo} touch #{File.join(current_path,'tmp','restart.txt')}"
+  %w[start stop restart].each do |command|
+    desc "#{command} unicorn server"
+    task command, roles: :app, except: {no_release: true} do
+      run "/etc/init.d/unicorn_#{application} #{command}"
+    end
   end
+
+  desc "Override deploy:cold to NOT run migrations - there's no database"
+  task :cold do
+    update
+    start
+  end
+  
+  task :precompile_assets do
+    run "cd #{latest_release}; bundle exec rake assets:precompile"
+    run "cd #{latest_release}; cp app/assets/images/* public/assets/; cp app/assets/files/* public/assets/"
+  end
+
+  desc "reload the database with seed data"
+  task :seed do
+    run "cd #{current_path}; rake db:seed RAILS_ENV=#{rails_env}"
+  end
+
+  task :install_bundler, :roles => :app do
+    run "type -P bundle &>/dev/null || { gem install bundler --no-rdoc --no-ri; }"
+  end
+
+  desc "Update the crontab file"
+  task :update_crontab, :roles => :db do
+    run "cd #{release_path} && whenever --update-crontab #{application}"
+  end
+
+  task :setup_config, roles: :app do
+    sudo "ln -nfs #{current_path}/config/nginx.conf /etc/nginx/sites-enabled/#{application}"
+    sudo "ln -nfs #{current_path}/config/unicorn_init.sh /etc/init.d/unicorn_#{application}"
+    run "mkdir -p #{shared_path}/config"
+    put File.read("config/database.yml.example"), "#{shared_path}/config/database.yml"
+    put File.read("config/elasticsearch.yml.example"), "#{shared_path}/config/elasticsearch.yml"
+    put File.read("config/mail.yml.example"), "#{shared_path}/config/mail.yml"
+    put File.read("config/sam.yml.example"), "#{shared_path}/config/sam.yml"
+    puts "Now edit the config files in #{shared_path}."
+  end
+  after "deploy:setup", "deploy:setup_config"
+
+  task :symlink_config, roles: :app do
+    run "ln -nfs #{shared_path}/config/database.yml #{release_path}/config/database.yml"
+    run "ln -nfs #{shared_path}/uploads #{release_path}/public/uploads"
+  end
+  after "deploy:finalize_update", "deploy:symlink_config"
+  
+  task :symlink_uploads, roles: :app do
+    run "ln -nfs #{shared_path}/uploads #{release_path}/public/uploads"
+  end
+  after "deploy:finalize_update", "deploy:symlink_uploads"
+
+  desc "Make sure local git is in sync with remote."
+  task :check_revision, roles: :web do
+    unless `git rev-parse HEAD` == `git rev-parse origin/master`
+      puts "WARNING: HEAD is not the same as origin/master"
+      puts "Run `git push` to sync changes."
+      exit
+    end
+  end
+  before "deploy", "deploy:check_revision"
 end
-
-tasks = ["deploy:finalize_update", "utils:copy_config_file"]
-
-after *tasks
-after "deploy:update_code", "db:create", "db:migrate", "utils:compile_assets"
