@@ -81,7 +81,7 @@ module DigitalLibrary
 #      symbolize_keys
 
     settings_hash = YAML.load_file(Rails.root.join('config', 'mail.yml'))
-    config.mailer_config = Hashie::Mash.new(settings_hash[Rails.env])
+    config.mailer_configuration = Hashie::Mash.new(settings_hash[Rails.env])
     #config.mailer_configuration = YAML.load(File.read(
     #  File.join(Rails.root, 'config', 'mail.yml')))[Rails.env].symbolize_keys
 
