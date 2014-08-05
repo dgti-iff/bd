@@ -32,6 +32,7 @@ gem 'simple-navigation', '~> 3.11.0'
 gem 'nokogiri'
 gem "nsivideogranulate", "~> 0.2.0"
 gem 'rubyzip', '0.9.9'
+gem 'hashie', '~> 2.0.5'
 
 group :assets do
   gem 'sass-rails',   '~> 4.0.1'

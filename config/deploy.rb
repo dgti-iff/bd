@@ -3,8 +3,6 @@ require "bundler/capistrano"
 set :bundle_flags, "--deployment"
 server "10.0.1.79", :web, :app, :db, primary: true
 
-default_environment["RAILS_ENV"] = 'production'
-
 set :application, "bd"
 set :user, "deploy"
 set :deploy_to, "/home/#{user}/#{application}"
@@ -72,6 +70,9 @@ namespace :deploy do
 
   task :symlink_config, roles: :app do
     run "ln -nfs #{shared_path}/config/database.yml #{release_path}/config/database.yml"
+    run "ln -nfs #{shared_path}/config/elasticsearch.yml #{release_path}/config/elasticsearch.yml"
+    run "ln -nfs #{shared_path}/config/mail.yml #{release_path}/config/mail.yml"
+    run "ln -nfs #{shared_path}/config/sam.yml #{release_path}/config/sam.yml"
     run "ln -nfs #{shared_path}/uploads #{release_path}/public/uploads"
   end
   after "deploy:finalize_update", "deploy:symlink_config"

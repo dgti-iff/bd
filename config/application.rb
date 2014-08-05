@@ -53,27 +53,37 @@ module DigitalLibrary
     config.assets.version = '1.0'
     config.apache_log_file = '/var/log/apache2/access.log.1'
 
+    settings_hash = YAML.load_file(Rails.root.join('config', 'sam.yml'))
+    config.sam_configuration = Hashie::Mash.new(settings_hash[Rails.env])
     # Configuracoes do acesso ao SAM
-    config.sam_configuration = YAML.load(
-      File.read(File.join(Rails.root, 'config', 'sam.yml')))[Rails.env].
-      symbolize_keys
+#    config.sam_configuration = YAML.load(
+#      File.read(File.join(Rails.root, 'config', 'sam.yml')))[Rails.env].
+#      symbolize_keys
 
+#    settings_hash = YAML.load_file(Rails.root.join('config', 'cloudooo.yml'))
+#    config.cloudooo_configuration = Hashie::Mash.new(settings_hash[Rails.env])
     # Configuracoes do acesso ao Cloudooo
-    config.cloudooo_configuration = YAML.load(
-      File.read(File.join(Rails.root, 'config', 'cloudooo.yml')))[Rails.env].
-      symbolize_keys
+#    config.cloudooo_configuration = YAML.load(
+#      File.read(File.join(Rails.root, 'config', 'cloudooo.yml')))[Rails.env].
+#      symbolize_keys
 
+#    settings_hash = YAML.load_file(Rails.root.join('config', 'cloudooo.yml'))
+#    config.cloudooo_configuration = Hashie::Mash.new(settings_hash[Rails.env])
     # Configuracoes de acesso ao elasticsearch
-    config.elasticsearch_config = YAML.load(
-      File.read(File.join(Rails.root, 'config', 'elasticsearch.yml')))[Rails.env]
+    settings_hash = YAML.load_file(Rails.root.join('config', 'elasticsearch.yml'))
+    config.elasticsearch_config = Hashie::Mash.new(settings_hash[Rails.env])
+    #config.elasticsearch_config = YAML.load(
+    #  File.read(File.join(Rails.root, 'config', 'elasticsearch.yml')))[Rails.env]
 
     # Configuracoes de acesso ao nsi videogranulate
-    config.videogranulate_configuration = YAML.load(
-      File.read(File.join(Rails.root, 'config', 'videogranulate.yml')))[Rails.env].
-      symbolize_keys
+#    config.videogranulate_configuration = YAML.load(
+#      File.read(File.join(Rails.root, 'config', 'videogranulate.yml')))[Rails.env].
+#      symbolize_keys
 
-    config.mailer_configuration = YAML.load(File.read(
-      File.join(Rails.root, 'config', 'mail.yml')))[Rails.env].symbolize_keys
+    settings_hash = YAML.load_file(Rails.root.join('config', 'mail.yml'))
+    config.mailer_config = Hashie::Mash.new(settings_hash[Rails.env])
+    #config.mailer_configuration = YAML.load(File.read(
+    #  File.join(Rails.root, 'config', 'mail.yml')))[Rails.env].symbolize_keys
 
     # configurações de itens nos portlets
     config.limite_de_itens_nos_portlets = 5
