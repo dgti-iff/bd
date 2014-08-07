@@ -66,9 +66,10 @@ DigitalLibrary::Application.configure do
   # with SQLite, MySQL, and PostgreSQL)
   # config.active_record.auto_explain_threshold_in_seconds = 0.5
   config.middleware.use ExceptionNotifier,
+    :email => {
     :email_prefix => "[BD ERRO] ",
     :sender_address => %{"BD" <no-replay@bd.iff.edu.br>},
     :exception_recipients => %w{bibliotecadigital@iff.edu.br}
-
+  }
   config.eager_load = true
 end
