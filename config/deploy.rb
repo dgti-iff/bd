@@ -3,6 +3,8 @@ require "bundler/capistrano"
 set :bundle_flags, "--deployment"
 server "10.0.1.79", :web, :app, :db, primary: true
 
+default_environment["RAILS_ENV"] = 'production'
+
 set :application, "bd"
 set :user, "deploy"
 set :deploy_to, "/home/#{user}/#{application}"
@@ -39,7 +41,7 @@ namespace :deploy do
   
   task :precompile_assets do
     run "cd #{latest_release}; bundle exec rake assets:precompile"
-    #run "cd #{latest_release}; cp app/assets/images/* public/assets/; cp app/assets/files/* public/assets/"
+    run "cd #{latest_release}; cp -rf app/assets/images/* public/assets/"
   end
 
   desc "reload the database with seed data"
