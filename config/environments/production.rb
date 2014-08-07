@@ -65,11 +65,11 @@ DigitalLibrary::Application.configure do
   # Log the query plan for queries taking more than this (works
   # with SQLite, MySQL, and PostgreSQL)
   # config.active_record.auto_explain_threshold_in_seconds = 0.5
-  config.middleware.use ExceptionNotifier,
+  config.middleware.use ExceptionNotification::Rack,
     :email => {
-    :email_prefix => "[BD ERRO] ",
-    :sender_address => %{"BD" <no-replay@bd.iff.edu.br>},
-    :exception_recipients => %w{bibliotecadigital@iff.edu.br}
+      :email_prefix => "[BD ERRO] ",
+      :sender_address => %{"BD" <no-replay@bd.iff.edu.br>},
+      :exception_recipients => %w{bibliotecadigital@iff.edu.br}
   }
   config.eager_load = true
 end
