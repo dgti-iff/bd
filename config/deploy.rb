@@ -39,7 +39,7 @@ namespace :deploy do
   
   task :precompile_assets do
     run "cd #{latest_release}; bundle exec rake assets:precompile"
-    run "cd #{latest_release}; cp app/assets/images/* public/assets/; cp app/assets/files/* public/assets/"
+    #run "cd #{latest_release}; cp app/assets/images/* public/assets/; cp app/assets/files/* public/assets/"
   end
 
   desc "reload the database with seed data"
