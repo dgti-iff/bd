@@ -19,7 +19,7 @@ require 'nokogiri'
 
 module ApplicationHelper
   def title
-    base_title = "Biblioteca Digital da EPCT"
+    base_title = "Biblioteca Digital"
     if @title.nil?
       base_title
     else
