@@ -18,10 +18,6 @@
         %label
           = check_box_tag "parametros[tipos][]", tipo.name.underscore
           = tipo.nome_humanizado
-    %li
-      %label
-        = check_box_tag "parametros[tipos][]", "pronatec"
-        = "PRONATEC"
 
   - if @usuario && @usuario.pode_buscar_por_estados?
     = f.label 'Estado do Conteúdo'
