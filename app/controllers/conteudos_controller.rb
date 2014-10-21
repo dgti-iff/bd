@@ -228,7 +228,7 @@ class ConteudosController < ApplicationController
   def conteudo_hash
     hash = {
       arquivo_attributes: [:uploaded_file],
-      autores_attributes: [:nome, :lattes, :_destroy]
+      autores_attributes: [:id, :nome, :lattes, :_destroy]
     }
     hash.merge!(curso_ids: []) if tipo_conteudo.to_sym == :objeto_de_aprendizagem
     hash.with_indifferent_access
