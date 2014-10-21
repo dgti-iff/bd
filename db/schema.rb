@@ -19,14 +19,14 @@ ActiveRecord::Schema.define(version: 20121004182913) do
   create_table "acessos", force: true do |t|
     t.date     "data"
     t.integer  "quantidade"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "areas", force: true do |t|
     t.string   "nome"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "arquivos", force: true do |t|
@@ -34,8 +34,8 @@ ActiveRecord::Schema.define(version: 20121004182913) do
     t.string   "key"
     t.string   "mime_type"
     t.integer  "conteudo_id"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "thumbnail_key"
   end
 
@@ -43,8 +43,8 @@ ActiveRecord::Schema.define(version: 20121004182913) do
     t.string   "nome"
     t.string   "lattes"
     t.integer  "conteudo_id"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "buscas", force: true do |t|
@@ -52,16 +52,16 @@ ActiveRecord::Schema.define(version: 20121004182913) do
     t.string   "titulo"
     t.text     "descricao"
     t.integer  "usuario_id"
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.boolean  "mala_direta", default: false
   end
 
   create_table "campi", force: true do |t|
     t.string   "nome"
     t.integer  "instituicao_id"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "ckeditor_assets", force: true do |t|
@@ -71,8 +71,8 @@ ActiveRecord::Schema.define(version: 20121004182913) do
     t.integer  "assetable_id"
     t.string   "assetable_type",    limit: 30
     t.string   "type",              limit: 30
-    t.datetime "created_at",                   null: false
-    t.datetime "updated_at",                   null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "ckeditor_assets", ["assetable_type", "assetable_id"], name: "idx_ckeditor_assetable", using: :btree
@@ -84,8 +84,8 @@ ActiveRecord::Schema.define(version: 20121004182913) do
     t.text     "direitos"
     t.text     "resumo"
     t.string   "type"
-    t.datetime "created_at",                          null: false
-    t.datetime "updated_at",                          null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "subtitulo"
     t.string   "nome_evento"
     t.string   "local_evento"
@@ -126,8 +126,8 @@ ActiveRecord::Schema.define(version: 20121004182913) do
   create_table "cursos", force: true do |t|
     t.string   "nome"
     t.integer  "eixo_tematico_id"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "cursos_objetos_de_aprendizagem", id: false, force: true do |t|
@@ -137,8 +137,8 @@ ActiveRecord::Schema.define(version: 20121004182913) do
 
   create_table "eixos_tematicos", force: true do |t|
     t.string   "nome"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "favoritos", id: false, force: true do |t|
@@ -148,29 +148,29 @@ ActiveRecord::Schema.define(version: 20121004182913) do
 
   create_table "graos", force: true do |t|
     t.integer  "conteudo_id"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "tipo"
     t.string   "key"
   end
 
   create_table "graus", force: true do |t|
     t.string   "nome"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "idiomas", force: true do |t|
     t.string   "sigla"
     t.string   "descricao"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "instituicoes", force: true do |t|
     t.string   "nome"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "mudancas_de_estado", force: true do |t|
@@ -178,8 +178,8 @@ ActiveRecord::Schema.define(version: 20121004182913) do
     t.integer  "conteudo_id"
     t.string   "de"
     t.string   "para"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "motivo"
   end
 
@@ -189,8 +189,8 @@ ActiveRecord::Schema.define(version: 20121004182913) do
   create_table "notificacoes", force: true do |t|
     t.integer  "conteudo_id"
     t.integer  "usuario_id"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "titulo_conteudo"
   end
 
@@ -209,8 +209,8 @@ ActiveRecord::Schema.define(version: 20121004182913) do
     t.string   "tipo_do_grao"
     t.integer  "referenciavel_id"
     t.string   "referenciavel_type"
-    t.datetime "created_at",         null: false
-    t.datetime "updated_at",         null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "referencias_nas_cestas", id: false, force: true do |t|
@@ -221,8 +221,8 @@ ActiveRecord::Schema.define(version: 20121004182913) do
   create_table "sub_areas", force: true do |t|
     t.string   "nome"
     t.integer  "area_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "usuarios", force: true do |t|
@@ -236,8 +236,8 @@ ActiveRecord::Schema.define(version: 20121004182913) do
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
-    t.datetime "created_at",                          null: false
-    t.datetime "updated_at",                          null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "nome_completo"
     t.integer  "campus_id"
     t.string   "confirmation_token"
