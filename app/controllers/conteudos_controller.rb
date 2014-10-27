@@ -1,5 +1,5 @@
 # encoding: utf-8
-require './lib/extrair_metadados.rb'
+# require './lib/extrair_metadados.rb'
 
 class ConteudosController < ApplicationController
   before_filter :authenticate_usuario!, except: [:granularizou, :show,
@@ -27,7 +27,7 @@ class ConteudosController < ApplicationController
 
     if @conteudo.save
       if @conteudo.permite_extracao_de_metadados? and @conteudo.arquivo.present? and @conteudo.arquivo.extensao == "pdf"
-        extrair_metadados(@conteudo)
+        # extrair_metadados(@conteudo)
         redirect_to root_path,
                   notice: "#{@conteudo.class.nome_humanizado} enviado com sucesso"
       else
