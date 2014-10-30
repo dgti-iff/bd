@@ -22,7 +22,7 @@
       = f.input :direitos
       %span.clear
 
-  - if @conteudo.new_record?
-    = javascript_tag "ocultar_metadados();"
-
   = f.submit 'Salvar'
+/  - if @conteudo.new_record?
+/    = javascript_tag "ocultar_metadados();"
+
